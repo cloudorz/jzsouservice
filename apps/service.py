@@ -2,88 +2,20 @@
 
 import re, datetime
 
-from pymongo import errors
+import tornado.httpclient
+from tornado import gen
+from tornado.web import asynchronous, HTTPError
 
 from apps import BaseRequestHandler
 from core.ext import db, ASCENDING, DESCENDING
 
-from utils.decorator import authenticated, validclient
-from utils.tools import QDict, pretty_time_str, generate_secret
-
-now = datetime.datetime.utcnow
-
-class EntryRequestHandler(BaseRequestHandler):
-
-    @validclient
-    def get(self, eid):
-        entry = db.entries.find_one({'_id': eid})
-
-        if entry:
-            self.make_rest(entry)
-            self.render_json(entry)
-        else:
-            raise HTTPError(404)
-
-    @authenticated
-    def post(self):
-        required = set(
-                'title',
-                'brief',
-                'city',
-                'tags',
-                'address',
-                'worktime',
-                'serviceitems',
-                'servicearea',
-                'contract',
-                'manager',
-                'block',
-                'location',
-                'updated',
-                'created',
-                )
-        data = self.get_data()
-        data['updated'] = now()
-        data['created'] = now()
-        if not required <= set(data):
-            raise HTTPError(400, 'Miss required args.')
-
-        try:
-            _id = db.entries.insert(data)
-        except errors.OperationFailure:
-            raise HTTPError(400, 'entry attributes error')
-
-        self.set_status(201)
-        self.set_header('Location',
-                self.full_uri_path(self.reverse_url('entries', _id)))
-        self.finish()
-
-    @authenticated
-    def put(self, eid):
-        data = self.get_data()
-        data['updated'] = now()
-        try:
-            db.entries.update({'_id': eid}, {'$set': data})
-        except errors.OperationFailure:
-            raise HTTPError(400, 'Arguments error')
-
-        self.set_status(200)
-        self.finish()
-
-    @authenticated
-    def delete(self, eid):
-        try:
-            db.entries.remove({'_id': eid})
-        except errors.OperationFailure:
-            raise HTTPError(500)
-
-        self.set_status(200)
-        self.finish()
+from utils.decorator import authenticated
+from utils.tools import QDict, pretty_time_str
 
 
 class SearchEntryHandler(BaseRequestHandler):
 
-    @validclient
+    @authenticated
     def get(self, city):
         query_dict = {'city': city}
 
@@ -171,3 +103,37 @@ class SearchEntryHandler(BaseRequestHandler):
                 entry['updated']) for entry in self.cur_entries))
 
         return '"%s"' % hasher.hexdigest()
+
+
+class CityRequestHandler(BaseRequestHandler):
+
+    @authenticated
+    def get(self):
+
+        cities = db.cities.find().sort({'no': ASCENDING})
+        self.make_list_rest(cities, 'cities')
+
+        self.render_json(cities)
+
+
+class LocRequestHandler(BaseRequestHandler):
+
+    # Just reurn cur city TODO
+    @authenticated
+    @asynchronous
+    @gen.engine
+    def get(self, lat, lon):
+
+        url = "%s/l2g/%f,%f" % (self.settings['geo_url'], lat, lon)
+        http_client = tornado.httpclient.AsyncHTTPClient()
+
+        # first request for mars location
+        city_label = yield gen.Task(http_client.fetch, url)
+        city = db.cities.find_one({'label': city_label})
+
+        if city:
+            self.make_rest(city)
+            self.render_json(city)
+            self.finish()
+        else:
+            raise HTTPError(400, "你的地点还没开启服务")
