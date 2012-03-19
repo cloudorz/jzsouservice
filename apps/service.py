@@ -18,6 +18,7 @@ class SearchEntryHandler(BaseRequestHandler):
 
     @authenticated
     def get(self, city):
+
         query_dict = {'city_label': city}
 
         condition = self.get_argument('q')
