@@ -66,4 +66,4 @@ class BaseRequestHandler(tornado.web.RequestHandler):
         return "%s://%s%s" % (req.protocol, req.host, path)
 
     def full_uri(self, query_dict=None):
-        return url_concat(self.get_normalized_http_url(), query_dict)
+        return url_concat(self.request.full_url(), query_dict)
