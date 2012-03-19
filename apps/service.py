@@ -69,7 +69,6 @@ class SearchEntryHandler(BaseRequestHandler):
             entries = cur_entry.sort('created', DESCENDING).\
                                 skip(q.start).\
                                 limit(q.num)
-            self.make_list_rest(entries, )
 
             entry_collection = {
                     'entries': entries,
