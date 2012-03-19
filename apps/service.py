@@ -1,6 +1,6 @@
 # coding: utf-8
 
-import re, datetime
+import re, datetime, hashlib
 
 import tornado.httpclient
 from tornado import gen
