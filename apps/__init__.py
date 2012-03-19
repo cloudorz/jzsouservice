@@ -50,6 +50,7 @@ class BaseRequestHandler(tornado.web.RequestHandler):
 
     def make_rest(self, data, name):
         data['id'] = 'urn:%s:%s' % (name, str(data['_id']))
+        del data['_id']
         req = self.request
         data['link'] = "%s://%s%s" % (
                 req.protocol,

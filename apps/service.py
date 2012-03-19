@@ -105,6 +105,13 @@ class SearchEntryHandler(BaseRequestHandler):
         return '"%s"' % hasher.hexdigest()
 
 
+class EntryHandler(BaseRequestHandler):
+
+    @authenticated
+    def put(self, eid):
+        pass
+
+
 class CityRequestHandler(BaseRequestHandler):
 
     @authenticated
