@@ -33,7 +33,7 @@ class SearchEntryHandler(BaseRequestHandler):
 
         def do_position(pos):
             lat, lon = pos.split(',')
-            query_dict['_location'] = {'$near': [lon, lat], '$maxDistance': 5000}
+            query_dict['_location'] = {'$near': [float(lon), float(lat)], '$maxDistance': 5000}
             return db.Entry.find(query_dict)
 
         def do_key(data):
