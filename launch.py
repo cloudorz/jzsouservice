@@ -12,7 +12,7 @@ from apps.service import SearchEntryHandler, CityRequestHandler, \
         LocRequestHandler, CateRequestHandler
 
 # server
-define('port', default=8200, help="run on the given port", type=int)
+define('port', default=8200, help="default given port", type=int)
 
 
 # main logic
