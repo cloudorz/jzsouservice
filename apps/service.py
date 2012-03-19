@@ -71,7 +71,7 @@ class SearchEntryHandler(BaseRequestHandler):
                                 limit(q.num)
 
             entry_collection = {
-                    'entries': entries,
+                    'entries': list(entries),
                     'total': total,
                     'link': self.full_uri(query_dict),
                     }
