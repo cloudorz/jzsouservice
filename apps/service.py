@@ -48,6 +48,7 @@ class SearchEntryHandler(BaseRequestHandler):
                 'key': do_key,
                 }
 
+        print query_dict
         if field in handle_q:
             q = QDict(
                     q=condition,
