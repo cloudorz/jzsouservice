@@ -66,7 +66,7 @@ class SearchEntryHandler(BaseRequestHandler):
                     'qn': q.num,
                     }
 
-            entries = cur_entry.sort({'created': DESCENDING}).\
+            entries = cur_entry.sort('created', DESCENDING).\
                                 skip(q.start).\
                                 limit(q.num)
             self.make_list_rest(entries, )
@@ -109,7 +109,7 @@ class CityRequestHandler(BaseRequestHandler):
 
     @authenticated
     def get(self):
-        cities = db.City.find().sort({'no': ASCENDING})
+        cities = db.City.find().sort('no', ASCENDING)
         self.render_json(cities)
 
 
@@ -117,5 +117,5 @@ class CateRequestHandler(BaseRequestHandler):
 
     @authenticated
     def get(self):
-        cates = db.Cate.find().sort({'no': ASCENDING})
+        cates = db.Cate.find().sort('no', ASCENDING)
         self.render_json(cates)
