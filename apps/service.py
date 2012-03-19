@@ -5,6 +5,7 @@ import re, datetime, hashlib
 import tornado.httpclient
 from tornado import gen
 from tornado.web import asynchronous, HTTPError
+from tornado.escape import utf8
 
 from apps import BaseRequestHandler
 from core.ext import db, ASCENDING, DESCENDING
@@ -48,7 +49,6 @@ class SearchEntryHandler(BaseRequestHandler):
                 'key': do_key,
                 }
 
-        print query_dict
         if field in handle_q:
             q = QDict(
                     q=condition,
@@ -62,7 +62,7 @@ class SearchEntryHandler(BaseRequestHandler):
             # composite the results collection
             total = cur_entry.count()
             query_dict = {
-                    'q': q.q,
+                    'q': utf8(q.q),
                     'st': q.start,
                     'qn': q.num,
                     }
