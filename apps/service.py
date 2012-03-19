@@ -99,7 +99,7 @@ class SearchEntryHandler(BaseRequestHandler):
     def compute_etag(self):
         hasher = hashlib.sha1()
         if 'cur_entries' in self.__dict__:
-            any(hasher.update(e) for e in sorted("%s-%s" % (str(entry['_id']),
+            any(hasher.update(e) for e in sorted("%s-%s" % (entry['id'],
                 entry['updated']) for entry in self.cur_entries))
 
         return '"%s"' % hasher.hexdigest()
