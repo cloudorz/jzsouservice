@@ -17,7 +17,7 @@ class SearchEntryHandler(BaseRequestHandler):
 
     @authenticated
     def get(self, city):
-        query_dict = {'city': city}
+        query_dict = {'city_label': city}
 
         condition = self.get_argument('q')
         if ':' in condition:
@@ -32,7 +32,7 @@ class SearchEntryHandler(BaseRequestHandler):
 
         def do_position(pos):
             lat, lon = pos.split(',')
-            query_dict['location'] = {'$near': [lon, lat], '$maxDistance': 5000}
+            query_dict['_location'] = {'$near': [lon, lat], '$maxDistance': 5000}
             return db.Entry.find(query_dict)
 
         def do_key(data):
