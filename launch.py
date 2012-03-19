@@ -8,8 +8,7 @@ import tornado.ioloop
 from tornado.options import define, options
 from tornado.web import url
 
-from apps.service import SearchEntryHandler, CityRequestHandler, \
-        LocRequestHandler, CateRequestHandler
+from apps.service import SearchEntryHandler#, CityRequestHandler, CateRequestHandler
 
 # server
 define('port', default=8200, help="default given port", type=int)
@@ -20,8 +19,8 @@ class Application(tornado.web.Application):
     def __init__(self):
         handlers = [
                 url(r'^/(?P<city>[a-z]+)/s$', SearchEntryHandler),
-                url(r'^/city/$', CityRequestHandler),
-                url(r'^/cate/$', CateRequestHandler),
+                #url(r'^/city/$', CityRequestHandler),
+                #url(r'^/cate/$', CateRequestHandler),
                 ]
         settings = dict(
                 # secure cookies
