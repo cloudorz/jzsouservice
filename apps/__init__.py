@@ -11,7 +11,7 @@ from core.ext import db
 from utils.escape import json_encode, json_decode
 
 
-class BaseRequestHandler(tornado.web.RequestHandler, AuthHeader):
+class BaseRequestHandler(tornado.web.RequestHandler):
     """the base RequestHandler for All."""
 
     @property
