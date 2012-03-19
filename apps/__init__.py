@@ -57,10 +57,7 @@ class BaseRequestHandler(tornado.web.RequestHandler):
                 req.host,
                 self.reverse_url(name)
                 )
-
-    def make_list_rest(self, data_list, name):
-        for e in data_list:
-            self.make_rest(e, name)
+        return data
 
     def full_uri_path(self, path):
         req = self.request

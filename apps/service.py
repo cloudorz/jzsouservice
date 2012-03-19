@@ -70,9 +70,9 @@ class SearchEntryHandler(BaseRequestHandler):
             entries = cur_entry.sort('created', DESCENDING).\
                                 skip(q.start).\
                                 limit(q.num)
-
+                                
             entry_collection = {
-                    'entries': self.make_list_rest(entries, 'entries'),
+                    'entries': [self.make_rest(e, 'entries') for e in entries],
                     'total': total,
                     'link': self.full_uri(query_dict),
                     }
