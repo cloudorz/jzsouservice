@@ -28,19 +28,19 @@ class SearchEntryHandler(BaseRequestHandler):
         # process functions
         def do_tag(tag):
             query_dict['tags'] = tag
-            return db.entries.find(query_dict)
+            return db.Entry.find(query_dict)
 
         def do_position(pos):
             lat, lon = pos.split(',')
             query_dict['location'] = {'$near': [lon, lat], '$maxDistance': 5000}
-            return db.entries.find(query_dict)
+            return db.Entry.find(query_dict)
 
         def do_key(data):
             rqs = [e.lower() for e in re.split('\s+', data) if e]
             regex = re.compile(r'%s' % '|'.join(rqs), re.IGNORECASE)
             query_dict['$or'] = [{'title': regex}, {'brief': regex},
                     {'desc': regex}, {'tags': {'$in': rqs}}] 
-            return db.entries.find(query_dict)
+            return db.Entry.find(query_dict)
 
         handle_q = {
                 'tag': do_tag, 
@@ -109,31 +109,13 @@ class CityRequestHandler(BaseRequestHandler):
 
     @authenticated
     def get(self):
-
-        cities = db.cities.find().sort({'no': ASCENDING})
-        self.make_list_rest(cities, 'cities')
-
+        cities = db.City.find().sort({'no': ASCENDING})
         self.render_json(cities)
 
 
-class LocRequestHandler(BaseRequestHandler):
+class CateRequestHandler(BaseRequestHandler):
 
-    # Just reurn cur city TODO
     @authenticated
-    @asynchronous
-    @gen.engine
-    def get(self, lat, lon):
-
-        url = "%s/l2g/%f,%f" % (self.settings['geo_url'], lat, lon)
-        http_client = tornado.httpclient.AsyncHTTPClient()
-
-        # first request for mars location
-        city_label = yield gen.Task(http_client.fetch, url)
-        city = db.cities.find_one({'label': city_label})
-
-        if city:
-            self.make_rest(city)
-            self.render_json(city)
-            self.finish()
-        else:
-            raise HTTPError(400, "你的地点还没开启服务")
+    def get(self):
+        cates = db.Cate.find().sort({'no': ASCENDING})
+        self.render_json(cates)

@@ -9,7 +9,7 @@ from tornado.options import define, options
 from tornado.web import url
 
 from apps.entry import SearchEntryHandler, CityRequestHandler, \
-        LocRequestHandler
+        LocRequestHandler, CateRequestHandler
 
 # server
 define('port', default=8000, help="run on the given port", type=int)
@@ -20,9 +20,8 @@ class Application(tornado.web.Application):
     def __init__(self):
         handlers = [
                 url(r'^/(?P<city>[a-z]+)/s$', SearchEntryHandler),
-                url(r'^/pos/(?P<lat>\d+\.\d+),(?P<lon>\d+\.\d+)$',
-                    LocRequestHandler),
                 url(r'^/city/$', CityRequestHandler),
+                url(r'^/cate/$', CateRequestHandler),
                 ]
         settings = dict(
                 # secure cookies
