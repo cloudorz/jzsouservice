@@ -8,7 +8,7 @@ import tornado.ioloop
 from tornado.options import define, options
 from tornado.web import url
 
-from apps.entry import SearchEntryHandler, CityRequestHandler, \
+from apps.service import SearchEntryHandler, CityRequestHandler, \
         LocRequestHandler, CateRequestHandler
 
 # server
