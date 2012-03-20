@@ -20,6 +20,10 @@ class SearchEntryHandler(BaseRequestHandler):
     def get(self, city):
 
         query_dict = {'city_label': city}
+        pos = self.get_argument('pos', None)
+        if pos:
+            lat, lon = pos.split(',')
+            query_dict['_location'] = {'$maxDistance': 5000, '$near': [float(lon), float(lat)]}
 
         condition = self.get_argument('q')
         if ':' in condition:
@@ -32,11 +36,6 @@ class SearchEntryHandler(BaseRequestHandler):
             query_dict['tags'] = tag
             return db.Entry.find(query_dict)
 
-        def do_position(pos):
-            lat, lon = pos.split(',')
-            query_dict['_location'] = {'$maxDistance': 5000, '$near': [float(lon), float(lat)]}
-            return db.Entry.find(query_dict)
-
         def do_key(data):
             rqs = [e.lower() for e in re.split('\s+', data) if e]
             regex = re.compile(r'%s' % '|'.join(rqs), re.IGNORECASE)
@@ -46,7 +45,6 @@ class SearchEntryHandler(BaseRequestHandler):
 
         handle_q = {
                 'tag': do_tag, 
-                'position': do_position,
                 'key': do_key,
                 }
 
