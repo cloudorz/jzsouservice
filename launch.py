@@ -19,7 +19,7 @@ class Application(tornado.web.Application):
     def __init__(self):
         handlers = [
                 url(r'^/(?P<city>[a-z]+)/s$', SearchEntryHandler),
-                url(r'^/entry/?P<eid>[a-z0-9]+$', EntryHandler,
+                url(r'^/entry/(?P<eid>[a-z0-9]+)$', EntryHandler,
                     name='entries'),
                 #url(r'^/city/$', CityRequestHandler),
                 #url(r'^/cate/$', CateRequestHandler),
