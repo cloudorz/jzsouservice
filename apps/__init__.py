@@ -49,13 +49,14 @@ class BaseRequestHandler(tornado.web.RequestHandler):
         return False
 
     def make_rest(self, data, name):
-        data['id'] = 'urn:%s:%s' % (name, str(data['_id']))
+        _id = str(data['_id'])
+        data['id'] = 'urn:%s:%s' % (name, _id)
         del data['_id']
         req = self.request
         data['link'] = "%s://%s%s" % (
                 req.protocol,
                 req.host,
-                self.reverse_url(name)
+                self.reverse_url(name, _id),
                 )
         return data
 
