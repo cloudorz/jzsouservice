@@ -19,7 +19,7 @@ class SearchEntryHandler(BaseRequestHandler):
     @authenticated
     def get(self, city):
 
-        query_dict = {'city_label': city}
+        query_dict = {'city_label': city, 'status': 'show'}
         pos = self.get_argument('pos', None)
         if pos:
             lat, lon = pos.split(',')
@@ -108,6 +108,7 @@ class EntryHandler(BaseRequestHandler):
 
     @authenticated
     def put(self, eid):
+        # TODO add score feature
         pass
 
 
