@@ -66,8 +66,7 @@ class SearchEntryHandler(BaseRequestHandler):
                     'qn': q.num,
                     }
 
-            entries = cur_entry.sort('created', DESCENDING).\
-                                skip(q.start).\
+            entries = cur_entry.skip(q.start).\
                                 limit(q.num)
                                 
             entry_collection = {
