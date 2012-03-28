@@ -23,7 +23,7 @@ class SearchEntryHandler(BaseRequestHandler):
         pos = self.get_argument('pos', None)
         if pos:
             lat, lon = pos.split(',')
-            query_dict['_location'] = {'$maxDistance': 3000, '$near': [float(lon), float(lat)]}
+            query_dict['_location'] = {'$maxDistance': 0.091, '$near': [float(lon), float(lat)]}
 
         condition = self.get_argument('q')
         if ':' in condition:
