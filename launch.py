@@ -8,7 +8,7 @@ import tornado.ioloop
 from tornado.options import define, options
 from tornado.web import url
 
-from apps.service import SearchEntryHandler, EntryHandler
+from apps.service import SearchEntryHandler, EntryHandler, CityRequestHandler
 
 # server
 define('port', default=8200, help="default given port", type=int)
