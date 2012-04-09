@@ -12,6 +12,11 @@ from core.ext import db, ASCENDING, DESCENDING
 
 from utils.decorator import authenticated
 from utils.tools import QDict, pretty_time_str
+from utils.ip2city import get_city
+
+
+# consists
+gic = pygeoip.GeoIP('/data/backup/GeoLiteCity.dat', pygeoip.MEMORY_CACHE)
 
 
 class SearchEntryHandler(BaseRequestHandler):
@@ -114,9 +119,29 @@ class EntryHandler(BaseRequestHandler):
 class CityRequestHandler(BaseRequestHandler):
 
     @authenticated
-    def get(self):
-        cities = db.City.find().sort('no', ASCENDING)
-        self.render_json(cities)
+    @asynchronous
+    @gen.engine
+    def get(self, latlon=None):
+        if latlon:
+            http_client = tornado.http_client.AsyncHTTPClient()
+            url = 'http://l.n2u.in/city/%s' % latlon
+            city_label = yield gen.Task(http_client.fetch, url)
+        else:
+            city_label = self.get_city_by_ip()
+
+        self.render_json(get_city(city_label))
+        self.finish()
+
+    def get_city_by_ip():
+        ip = self.request.headers['X-Real-IP']
+        city = 'hangzhou'
+        if ip:
+            record = gic.record_by_addr(ip)
+            if record:
+                city_ = record.get('city', None)
+                if city_:
+                    city = city_.lower()
+        return city
 
 
 class CateRequestHandler(BaseRequestHandler):
