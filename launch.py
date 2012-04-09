@@ -21,7 +21,7 @@ class Application(tornado.web.Application):
                 url(r'^/(?P<city>[a-z]+)/s$', SearchEntryHandler),
                 url(r'^/entry/(?P<eid>[a-z0-9]+)$', EntryHandler,
                     name='entries'),
-                url(r'^/city/(?P<latlon>[-+]?\d+\.\d+,[-+]?\d+\.\d+)|$', CityRequestHandler),
+                url(r'^/city/(?P<latlon>[-+]?\d+\.\d+,[-+]?\d+\.\d+|)$', CityRequestHandler),
                 #url(r'^/cate/$', CateRequestHandler),
                 ]
         settings = dict(
