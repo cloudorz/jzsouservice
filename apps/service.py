@@ -124,7 +124,7 @@ class CityRequestHandler(BaseRequestHandler):
     @gen.engine
     def get(self, latlon=None):
         if latlon:
-            http_client = tornado.http_client.AsyncHTTPClient()
+            http_client = tornado.httpclient.AsyncHTTPClient()
             url = 'http://l.n2u.in/city/%s' % latlon
             city_label = yield gen.Task(http_client.fetch, url)
         else:
