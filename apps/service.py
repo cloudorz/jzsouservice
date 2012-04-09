@@ -133,7 +133,7 @@ class CityRequestHandler(BaseRequestHandler):
         self.render_json(get_city(city_label))
         self.finish()
 
-    def get_city_by_ip():
+    def get_city_by_ip(self):
         ip = self.request.headers['X-Real-IP']
         city = 'hangzhou'
         if ip:
