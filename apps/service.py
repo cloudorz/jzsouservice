@@ -1,6 +1,7 @@
 # coding: utf-8
 
 import re, datetime, hashlib
+import pygeoip
 
 import tornado.httpclient
 from tornado import gen
