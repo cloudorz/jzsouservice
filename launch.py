@@ -29,7 +29,7 @@ class Application(tornado.web.Application):
                 cookie_secret="5b05a25df33a4609ca4c14caa6a8594b",
                 token="0b8b31819a8d4c1a8da9e19847dcb36a",
                 geo_url="http://l.n2u.in",
-                debug=True,
+                debug=False,
                 )
         super(Application, self).__init__(handlers, **settings)
 
