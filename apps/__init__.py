@@ -27,7 +27,7 @@ class BaseRequestHandler(tornado.web.RequestHandler):
             raise HTTPError(415)
 
         try:
-            data = self.dejson(self.request.body)
+            data = json_decode(self.request.body)
         except (ValueError, TypeError), e:
             raise HTTPError(415) # the data is not the right json format
 
