@@ -1,6 +1,5 @@
 # coding: utf-8
 
-import logger
 import re, datetime, hashlib
 import pygeoip
 
@@ -120,13 +119,11 @@ class EntryHandler(BaseRequestHandler):
         if not entry: raise HTTPError(404)
 
         data = self.get_data()
-        logger.warning(data)
 
         if set(data) <= set(entry):
             for k, v in data.items():
                 if k[:2] == 'c_':
                     set_data = set(entry[k])
-                    logger.warning(set_data)
                     data[k] = list(set_data.add(v))
 
             db.Entry.update({'_id': ObjectId(eid)}, {'$set': data})
