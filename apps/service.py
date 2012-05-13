@@ -119,6 +119,7 @@ class EntryHandler(BaseRequestHandler):
         if not entry: raise HTTPError(404)
 
         data = self.get_data()
+        print 'fuck',data
 
         if set(data) <= set(entry):
             for k, v in data.items():
