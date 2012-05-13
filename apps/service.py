@@ -123,7 +123,10 @@ class EntryHandler(BaseRequestHandler):
         if set(data) <= set(entry):
             for k, v in data.items():
                 if k[:2] == 'c_':
+                    print k
+                    print v
                     set_data = set(entry[k])
+                    print set_data
                     data[k] = list(set_data.add(v))
 
             db.Entry.update({'_id': ObjectId(eid)}, {'$set': data})
