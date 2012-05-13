@@ -68,7 +68,7 @@ class BaseRequestHandler(tornado.web.RequestHandler):
         del data['_id']
         # conert the set of the phone id to ids number 
         for k,v in data.items():
-            if e[:2] == 'c_':
+            if k[:2] == 'c_':
                 data[k] = len(v)
 
         req = self.request
