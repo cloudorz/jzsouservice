@@ -18,6 +18,21 @@ class BaseRequestHandler(tornado.web.RequestHandler):
     def is_json(self):
         return self.request.headers.get('Content-Type', '').split(';').pop(0).strip().lower() == 'application/json'
 
+    def get_data(self):
+        ''' parse the data from request body
+        now, only convert json data to python type
+        '''
+        # the content type is not "application/json"
+        if not self.is_json:
+            raise HTTPError(415)
+
+        try:
+            data = self.dejson(self.request.body)
+        except (ValueError, TypeError), e:
+            raise HTTPError(415) # the data is not the right json format
+
+        return data
+
     def write_error(self, status_code, **kwargs):
         if self.settings.get("debug") and "exc_info" in kwargs:
             # in debug mode, try to send a traceback
@@ -51,6 +66,11 @@ class BaseRequestHandler(tornado.web.RequestHandler):
         _id = str(data['_id'])
         data['id'] = 'urn:%s:%s' % (name, _id)
         del data['_id']
+        # conert the set of the phone id to ids number 
+        for k,v in data.items():
+            if e[:2] == 'c_':
+                data[k] = len(v)
+
         req = self.request
         data['link'] = "%s://%s%s" % (
                 req.protocol,

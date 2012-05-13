@@ -4,6 +4,8 @@ import re, datetime, hashlib
 import pygeoip
 
 import tornado.httpclient
+
+from pymongo.objectid import ObjectId
 from tornado import gen
 from tornado.web import asynchronous, HTTPError
 from tornado.escape import utf8
@@ -113,8 +115,20 @@ class EntryHandler(BaseRequestHandler):
 
     @authenticated
     def put(self, eid):
-        # TODO add score feature
-        pass
+        entry = db.Entry.find_one({'_id': ObjectId(eid)})
+        if not entry: raise HTTPError(404)
+
+        data = self.get_data()
+
+        if set(data) <= set(entry):
+            for k, v in data.items():
+                if k[:2] = 'c_':
+                    data[k] = entry[k].add(v)
+
+            db.Entry.update({'_id': ObjectId(eid)}, {'$set': data})
+
+        self.set_status(200)
+        self.finish()
 
 
 class CityRequestHandler(BaseRequestHandler):
